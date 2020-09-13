@@ -23,4 +23,5 @@
     <dimen name="marginStart_buttonNext_land">21dp</dimen>
     <dimen name="marginTop_LinearLayout_land">10dp</dimen>
     <dimen name="marginTop_repeatButton">8dp</dimen>
+    <dimen name="imageMarginTop">8dp</dimen>
 </resources>

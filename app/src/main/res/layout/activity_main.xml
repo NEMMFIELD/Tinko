@@ -9,46 +9,44 @@
     android:padding="@dimen/parent_padding"
     tools:context=".MainActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/my_toolbar"
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-    <Button
-        android:id="@+id/btn_latest"
-        android:layout_width="90dp"
         android:layout_height="wrap_content"
-        android:text="Latest"
-        android:textSize="11sp"
-        android:layout_gravity="right"
-        />
-        <Button
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:text="Hot"
-            android:textSize="11sp"
-            android:layout_gravity="right"
-            />
-        <Button
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:text="Top"
-            android:textSize="11sp"
-            android:layout_gravity="right"
-            />
+        android:background="#1db995">
 
-</androidx.appcompat.widget.Toolbar>
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_rnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/random" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_latest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/latest" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_hot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hot" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/top" />
+    </com.google.android.material.tabs.TabLayout>
 
 
 
     <ImageView
         android:id="@+id/imgView"
-        android:layout_below="@id/my_toolbar"
+android:layout_below="@+id/tabLayout"
+        android:layout_marginTop="@dimen/imageMarginTop"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/height_image"
         android:scaleType="centerCrop"

@@ -2,4 +2,8 @@
     <string name="app_name">Developers Life</string>
     <string name="repeat">Повторить</string>
     <string name="error">"Произошла ошибка при загрузке данных. Проверьте подключение к сети."</string>
+    <string name="random">Random</string>
+    <string name="latest">Latest</string>
+    <string name="hot">Hot</string>
+    <string name="top">Top</string>
 </resources>
