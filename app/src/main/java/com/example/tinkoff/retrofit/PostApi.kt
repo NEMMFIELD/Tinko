@@ -19,8 +19,8 @@ interface PostApi {
     @GET("latest/{numb}?json=true")
     suspend fun getLatest(@Path("numb") numb:Int):Response<Result>
 
-    @GET("hot/{numb}?json=true")
-    suspend fun getHots(@Path("numb") numb:Int):Response<Result>
+    @GET("top/{numb}?json=true")
+    suspend fun getTops(@Path("numb") numb:Int):Response<Result>
 
 
 }
