@@ -162,13 +162,42 @@ class MainActivity : AppCompatActivity() {
 
         btnNext.setOnClickListener {
             btnRepeat.visibility = View.GONE
-            
-            index++
-            if (index < myList.size) {
-                displaySubject(myList[index].gifUrl!!.replace("http","https"), myList[index].desc.toString())
-            } else {
-                loadPost()
+
+            when (position){
+                0->{
+                    index++
+                    if (index < myList.size) {
+                        displaySubject(myList[index].gifUrl!!.replace("http","https"), myList[index].desc.toString())
+                    } else {
+                        loadPost()
+                    }
+                }
+                1->{
+                    latIndex++
+                    if (latIndex < myList.size) {
+                        displaySubject(myList[latIndex].gifUrl!!.replace("http","https"), myList[latIndex].desc.toString())
+                    } else {
+                        loadPost()
+                    }
+                }
+                2->{
+                    topIndex++
+                    if (topIndex < myList.size) {
+                        displaySubject(myList[topIndex].gifUrl!!.replace("http","https"), myList[topIndex].desc.toString())
+                    } else {
+                        loadPost()
+                    }
+                }
+                else->{
+                    index++
+                    if (index < myList.size) {
+                        displaySubject(myList[index].gifUrl!!.replace("http","https"), myList[index].desc.toString())
+                    } else {
+                        loadPost()
+                    }
+                }
             }
+
 
 
             buttonPrevBlock()
@@ -176,9 +205,28 @@ class MainActivity : AppCompatActivity() {
 
         btnPrev.setOnClickListener {
             btnRepeat.visibility = View.GONE
-            index--
-            displaySubject(myList[index].gifUrl?.replace("http","https")!!, myList[index].desc.toString())
-            buttonPrevBlock()
+            when (position)
+            {
+                0->{  index--
+                    displaySubject(myList[index].gifUrl?.replace("http","https")!!, myList[index].desc.toString())
+                    buttonPrevBlock()}
+                1->{
+                    latIndex--
+                    displaySubject(myList[latIndex].gifUrl?.replace("http","https")!!, myList[latIndex].desc.toString())
+                    buttonPrevBlock()
+                }
+                2->{
+                    topIndex--
+                    displaySubject(myList[topIndex].gifUrl?.replace("http","https")!!, myList[topIndex].desc.toString())
+                    buttonPrevBlock()
+                }
+                else->{
+                    index--
+                    displaySubject(myList[index].gifUrl?.replace("http","https")!!, myList[index].desc.toString())
+                    buttonPrevBlock()
+                }
+            }
+
         }
     }
 
