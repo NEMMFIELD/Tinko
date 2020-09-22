@@ -1,6 +1,7 @@
 package com.example.tinkoff
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
@@ -25,8 +26,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tableLayout: TabLayout
     private var myList: MutableList<Post> = ArrayList()
     private var index: Int = 0 //Для рандома
-    private var latIndex: Int = -1 //Последние
-    private var topIndex:Int = -1 //Топ
+    private var latIndex: Int = 0 //Последние
+    private var topIndex:Int = 0 //Топ
     private var position:Int?=0
     private lateinit var btnPrev: ImageButton
     private lateinit var btnNext: ImageButton
@@ -67,80 +68,38 @@ class MainActivity : AppCompatActivity() {
             loadPost()
         }
 
-
         tableLayout.addOnTabSelectedListener(object:TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
             position = tab?.position
                 when (position)
                 {
                     0 -> {
+                        if (index < myList.size) {
+                            displaySubject(myList[index].gifUrl!!.replace("http","https"), myList[index].desc.toString())
+                        } else {
                             loadPost()
+                        }
                     }
 
                     1-> {
-                        latIndex++
-                        CoroutineScope(Dispatchers.Main).launch()
-                        {
-                            try {
-                                val response = Network().api.getLatest(0)
-
-                                if (response.isSuccessful) {
-                                    btnRepeat.visibility = View.GONE
-                                    btnNext.visibility = View.VISIBLE
-                                    btnPrev.visibility = View.VISIBLE
-                                   displaySubject(response.body()!!.result[latIndex].gifUrl!!.replace("http","https"),
-                                       response.body()!!.result[latIndex].desc.toString())
-                                    myList.add(response.body()!!.result[latIndex])
-                                }
-                            } catch (e: Exception) {
-                                // Toast.makeText(this@MainActivity, "Seems like error", Toast.LENGTH_SHORT).show()
-                                btnNext.visibility = View.GONE
-                                btnPrev.visibility = View.GONE
-                                imageGif.setImageResource(R.drawable.errorconnect)
-                                description.setText(R.string.error)
-                                btnRepeat.visibility = View.VISIBLE
-                                latIndex = 0
-                            }
-
+                       // latIndex++
+                        if (latIndex < myList.size ) {
+                            displaySubject(myList[latIndex].gifUrl!!.replace("http","https"), myList[latIndex].desc.toString())
+                        } else {
+                          loadLatestPost()
                         }
-
                     }
 
                     2-> {
-                        topIndex++
-                        CoroutineScope(Dispatchers.Main).launch()
-                        {
-                            try {
-                                val response = Network().api.getTops(0)
-
-                                if (response.isSuccessful) {
-                                    btnRepeat.visibility = View.GONE
-                                    btnNext.visibility = View.VISIBLE
-                                    btnPrev.visibility = View.VISIBLE
-                                    response.body()?.result!![topIndex].gifUrl?.let { it1 ->
-                                        response.body()!!.result[topIndex].desc?.let { it2 ->
-                                            displaySubject(
-                                                it1.replace("http", "https"),
-                                                it2
-                                            )
-                                        }
-                                    }
-                                    myList.add(response.body()!!.result[topIndex])
-                                }
-                            } catch (e: Exception) {
-                                // Toast.makeText(this@MainActivity, "Seems like error", Toast.LENGTH_SHORT).show()
-                                btnNext.visibility = View.GONE
-                                btnPrev.visibility = View.GONE
-                                imageGif.setImageResource(R.drawable.errorconnect)
-                                description.setText(R.string.error)
-                                btnRepeat.visibility = View.VISIBLE
-                                topIndex = 0
-                            }
-
+                       // topIndex++
+                        if (topIndex < myList.size ) {
+                            displaySubject(myList[topIndex].gifUrl!!.replace("http","https"), myList[topIndex].desc.toString())
+                        } else {
+                          loadTopPost()
                         }
                     }
                     else -> {
-                        loadPost()
+                       // loadPost()
                     }
                 }
 
@@ -165,41 +124,32 @@ class MainActivity : AppCompatActivity() {
 
             when (position){
                 0->{
-                    index++
+                   index++
+
                     if (index < myList.size) {
                         displaySubject(myList[index].gifUrl!!.replace("http","https"), myList[index].desc.toString())
                     } else {
                         loadPost()
+
                     }
                 }
                 1->{
-                    latIndex++
+                   latIndex++
                     if (latIndex < myList.size) {
                         displaySubject(myList[latIndex].gifUrl!!.replace("http","https"), myList[latIndex].desc.toString())
                     } else {
-                        loadPost()
+                     loadLatestPost()
                     }
                 }
                 2->{
-                    topIndex++
+                   topIndex++
                     if (topIndex < myList.size) {
                         displaySubject(myList[topIndex].gifUrl!!.replace("http","https"), myList[topIndex].desc.toString())
                     } else {
-                        loadPost()
-                    }
-                }
-                else->{
-                    index++
-                    if (index < myList.size) {
-                        displaySubject(myList[index].gifUrl!!.replace("http","https"), myList[index].desc.toString())
-                    } else {
-                        loadPost()
+                      loadTopPost()
                     }
                 }
             }
-
-
-
             buttonPrevBlock()
         }
 
@@ -267,6 +217,66 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun loadLatestPost()
+    {
+        CoroutineScope(Dispatchers.Main).launch()
+        {
+            try {
+                val response = Network().api.getLatest(0)
+
+                if (response.isSuccessful) {
+                    btnRepeat.visibility = View.GONE
+                    btnNext.visibility = View.VISIBLE
+                    btnPrev.visibility = View.VISIBLE
+                    displaySubject(response.body()!!.result[latIndex].gifUrl!!.replace("http","https"),
+                        response.body()!!.result[latIndex].desc.toString())
+                    myList.add(response.body()!!.result[latIndex])
+                }
+            } catch (e: Exception) {
+                // Toast.makeText(this@MainActivity, "Seems like error", Toast.LENGTH_SHORT).show()
+                btnNext.visibility = View.GONE
+                btnPrev.visibility = View.GONE
+                imageGif.setImageResource(R.drawable.errorconnect)
+                description.setText(R.string.error)
+                btnRepeat.visibility = View.VISIBLE
+                // latIndex = 0
+            }
+
+        }
+    }
+    private fun loadTopPost()
+    {
+        CoroutineScope(Dispatchers.Main).launch()
+        {
+            try {
+                val response = Network().api.getTops(0)
+
+                if (response.isSuccessful) {
+                    btnRepeat.visibility = View.GONE
+                    btnNext.visibility = View.VISIBLE
+                    btnPrev.visibility = View.VISIBLE
+                    response.body()?.result!![topIndex].gifUrl?.let { it1 ->
+                        response.body()!!.result[topIndex].desc?.let { it2 ->
+                            displaySubject(
+                                it1.replace("http", "https"),
+                                it2
+                            )
+                        }
+                    }
+                    myList.add(response.body()!!.result[topIndex])
+                }
+            } catch (e: Exception) {
+                // Toast.makeText(this@MainActivity, "Seems like error", Toast.LENGTH_SHORT).show()
+                btnNext.visibility = View.GONE
+                btnPrev.visibility = View.GONE
+                imageGif.setImageResource(R.drawable.errorconnect)
+                description.setText(R.string.error)
+                btnRepeat.visibility = View.VISIBLE
+                // topIndex = 0
+            }
+        }
     }
 
     private fun buttonPrevBlock() {
