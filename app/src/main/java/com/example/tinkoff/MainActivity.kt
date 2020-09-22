@@ -25,6 +25,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var description: TextView
     private lateinit var tableLayout: TabLayout
     private var myList: MutableList<Post> = ArrayList()
+    private var latestList:MutableList<Post> = ArrayList()
+    private var topList:MutableList<Post> = ArrayList()
+
     private var index: Int = 0 //Для рандома
     private var latIndex: Int = 0 //Последние
     private var topIndex:Int = 0 //Топ
@@ -39,6 +42,8 @@ class MainActivity : AppCompatActivity() {
         private const val SAVED_LATINDEX = "latindex"
         private const val SAVED_TOPINDEX = "topindex"
         private const val SAVED_POSTS = "list"
+        private const val SAVED_LATESTPOSTS = "latestlist"
+        private const val SAVED_TOPPOSTS = "toplist"
         private const val SAVED_TABSTATE = "tabState"
     }
 
@@ -57,6 +62,8 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState != null) {
             myList = savedInstanceState.getParcelableArrayList<Post>(SAVED_POSTS) as MutableList<Post>
+            latestList = savedInstanceState.getParcelableArrayList<Post>(SAVED_LATESTPOSTS) as MutableList<Post>
+            topList = savedInstanceState.getParcelableArrayList<Post>(SAVED_TOPPOSTS) as MutableList<Post>
             index = savedInstanceState.getInt(SAVED_INDEX)
             latIndex=savedInstanceState.getInt(SAVED_LATINDEX)
             topIndex=savedInstanceState.getInt(SAVED_TOPINDEX)
@@ -83,8 +90,8 @@ class MainActivity : AppCompatActivity() {
 
                     1-> {
                        // latIndex++
-                        if (latIndex < myList.size ) {
-                            displaySubject(myList[latIndex].gifUrl!!.replace("http","https"), myList[latIndex].desc.toString())
+                        if (latIndex < latestList.size ) {
+                            displaySubject(latestList[latIndex].gifUrl!!.replace("http","https"), latestList[latIndex].desc.toString())
                         } else {
                           loadLatestPost()
                         }
@@ -92,8 +99,8 @@ class MainActivity : AppCompatActivity() {
 
                     2-> {
                        // topIndex++
-                        if (topIndex < myList.size ) {
-                            displaySubject(myList[topIndex].gifUrl!!.replace("http","https"), myList[topIndex].desc.toString())
+                        if (topIndex < topList.size ) {
+                            displaySubject(topList[topIndex].gifUrl!!.replace("http","https"), topList[topIndex].desc.toString())
                         } else {
                           loadTopPost()
                         }
@@ -135,16 +142,16 @@ class MainActivity : AppCompatActivity() {
                 }
                 1->{
                    latIndex++
-                    if (latIndex < myList.size) {
-                        displaySubject(myList[latIndex].gifUrl!!.replace("http","https"), myList[latIndex].desc.toString())
+                    if (latIndex < latestList.size) {
+                        displaySubject(latestList[latIndex].gifUrl!!.replace("http","https"), latestList[latIndex].desc.toString())
                     } else {
                      loadLatestPost()
                     }
                 }
                 2->{
                    topIndex++
-                    if (topIndex < myList.size) {
-                        displaySubject(myList[topIndex].gifUrl!!.replace("http","https"), myList[topIndex].desc.toString())
+                    if (topIndex < topList.size) {
+                        displaySubject(topList[topIndex].gifUrl!!.replace("http","https"), topList[topIndex].desc.toString())
                     } else {
                       loadTopPost()
                     }
@@ -162,26 +169,23 @@ class MainActivity : AppCompatActivity() {
                     buttonPrevBlock()}
                 1->{
                     latIndex--
-                    displaySubject(myList[latIndex].gifUrl?.replace("http","https")!!, myList[latIndex].desc.toString())
+                    displaySubject(latestList[latIndex].gifUrl?.replace("http","https")!!, latestList[latIndex].desc.toString())
                     buttonPrevBlock()
                 }
                 2->{
                     topIndex--
-                    displaySubject(myList[topIndex].gifUrl?.replace("http","https")!!, myList[topIndex].desc.toString())
+                    displaySubject(topList[topIndex].gifUrl?.replace("http","https")!!, topList[topIndex].desc.toString())
                     buttonPrevBlock()
                 }
-                else->{
-                    index--
-                    displaySubject(myList[index].gifUrl?.replace("http","https")!!, myList[index].desc.toString())
-                    buttonPrevBlock()
-                }
-            }
 
+            }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelableArrayList(SAVED_POSTS, ArrayList(myList))
+        outState.putParcelableArrayList(SAVED_LATESTPOSTS, ArrayList(latestList))
+        outState.putParcelableArrayList(SAVED_TOPPOSTS, ArrayList(topList))
         outState.putInt(SAVED_INDEX, index)
         outState.putInt(SAVED_LATINDEX, latIndex)
         outState.putInt(SAVED_TOPINDEX, topIndex)
@@ -232,7 +236,7 @@ class MainActivity : AppCompatActivity() {
                     btnPrev.visibility = View.VISIBLE
                     displaySubject(response.body()!!.result[latIndex].gifUrl!!.replace("http","https"),
                         response.body()!!.result[latIndex].desc.toString())
-                    myList.add(response.body()!!.result[latIndex])
+                    latestList.add(response.body()!!.result[latIndex])
                 }
             } catch (e: Exception) {
                 // Toast.makeText(this@MainActivity, "Seems like error", Toast.LENGTH_SHORT).show()
@@ -265,7 +269,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
                     }
-                    myList.add(response.body()!!.result[topIndex])
+                    topList.add(response.body()!!.result[topIndex])
                 }
             } catch (e: Exception) {
                 // Toast.makeText(this@MainActivity, "Seems like error", Toast.LENGTH_SHORT).show()
