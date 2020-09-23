@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     private var myList: MutableList<Post> = ArrayList()
     private var latestList:MutableList<Post> = ArrayList()
     private var topList:MutableList<Post> = ArrayList()
-
+   // private var generalList:MutableList<Post> = ArrayList()
     private var index: Int = 0 //Для рандома
     private var latIndex: Int = 0 //Последние
     private var topIndex:Int = 0 //Топ
@@ -58,6 +58,8 @@ class MainActivity : AppCompatActivity() {
         btnRepeat = findViewById(R.id.btn_repeat)
         tableLayout = findViewById(R.id.tabLayout)
 
+
+
         if (savedInstanceState != null) {
             myList = savedInstanceState.getParcelableArrayList<Post>(SAVED_POSTS) as MutableList<Post>
             latestList = savedInstanceState.getParcelableArrayList<Post>(SAVED_LATESTPOSTS) as MutableList<Post>
@@ -66,10 +68,15 @@ class MainActivity : AppCompatActivity() {
             latIndex=savedInstanceState.getInt(SAVED_LATINDEX)
             topIndex=savedInstanceState.getInt(SAVED_TOPINDEX)
             position=savedInstanceState.getInt(SAVED_TABSTATE)
+           try {
             displaySubject(myList[index].gifUrl!!.replace("http","https"), myList[index].desc.toString())
             displaySubject(latestList[latIndex].gifUrl!!.replace("http","https"), latestList[latIndex].desc.toString())
-            displaySubject(topList[topIndex].gifUrl!!.replace("http","https"), topList[topIndex].desc.toString())
-            if (myList.size != 0) btnPrev.isEnabled = true
+            displaySubject(topList[topIndex].gifUrl!!.replace("http","https"), topList[topIndex].desc.toString())}
+           catch (e:java.lang.Exception)
+           {
+
+           }
+            if (myList.size != 0 || latestList.size!=0 || topList.size!=0) btnPrev.isEnabled = true
         }
         else {
             when (position)
