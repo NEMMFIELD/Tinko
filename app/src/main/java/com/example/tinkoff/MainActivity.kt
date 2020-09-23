@@ -51,8 +51,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.my_toolbar))
-
         description = findViewById(R.id.desc)
         imageGif = findViewById(R.id.imgView)
         btnPrev = findViewById(R.id.btn_prev)
@@ -68,11 +66,19 @@ class MainActivity : AppCompatActivity() {
             latIndex=savedInstanceState.getInt(SAVED_LATINDEX)
             topIndex=savedInstanceState.getInt(SAVED_TOPINDEX)
             position=savedInstanceState.getInt(SAVED_TABSTATE)
-            displaySubject(myList[index].gifUrl!!, myList[index].desc.toString())
+            displaySubject(myList[index].gifUrl!!.replace("http","https"), myList[index].desc.toString())
+            displaySubject(latestList[latIndex].gifUrl!!.replace("http","https"), latestList[latIndex].desc.toString())
+            displaySubject(topList[topIndex].gifUrl!!.replace("http","https"), topList[topIndex].desc.toString())
             if (myList.size != 0) btnPrev.isEnabled = true
         }
         else {
-            loadPost()
+            when (position)
+            {
+                0->{ loadPost()}
+                1->{loadLatestPost()}
+                2->{loadTopPost()}
+            }
+
         }
 
         tableLayout.addOnTabSelectedListener(object:TabLayout.OnTabSelectedListener{
@@ -189,7 +195,7 @@ class MainActivity : AppCompatActivity() {
         outState.putInt(SAVED_INDEX, index)
         outState.putInt(SAVED_LATINDEX, latIndex)
         outState.putInt(SAVED_TOPINDEX, topIndex)
-        outState.putInt(SAVED_TABSTATE,position!!)
+        outState.putInt(SAVED_TABSTATE, position!!)
         super.onSaveInstanceState(outState)
     }
 
